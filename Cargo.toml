@@ -1,0 +1,38 @@
+[package]
+name = "learn-dioxus"
+version = "0.1.0"
+authors = ["Oleksandr <o.strashnenko@steel.mil.ua>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axum = { version = "0.7", features = ["tokio", "http1"], optional = true}
+dioxus = { version = "0.6.1", features = ["router", "fullstack"] }
+dioxus-cli-config = "0.6.1"
+reqwest = { version = "0.12.12", features = ["json"] }
+rusqlite = { version = "0.32.1", optional = true }
+serde = { version = "1.0.217", features = ["derive"] }
+serde_json = "1.0.134"
+tokio = "1.42.0"
+
+
+[features]
+default = ["desktop"]
+web = ["dioxus/web"]
+desktop = ["dioxus/desktop", "dep:axum"]
+mobile = ["dioxus/mobile"]
+server = ["dioxus/server", "dep:axum"]
+rusqlite = ["dep:rusqlite"]
+
+[profile]
+
+[profile.wasm-dev]
+inherits = "dev"
+opt-level = 1
+
+[profile.server-dev]
+inherits = "dev"
+
+[profile.android-dev]
+inherits = "dev"
