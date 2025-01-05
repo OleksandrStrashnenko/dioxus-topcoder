@@ -1,0 +1,9 @@
+.card {
+    background: white;
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    /*cursor: grab;*/
+    /*user-select: none;*/
+    position: relative;
+}

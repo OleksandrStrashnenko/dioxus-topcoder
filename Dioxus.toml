@@ -1,12 +1,21 @@
 [application]
 
 # App (Project) Name
-name = "learn-dioxus"
+name = "translator"
 
 [web.app]
 
 # HTML title tag content
-title = "learn-dioxus"
+title = "Translator"
+
+[bundle]
+icon = [
+    "../assets/favicon.png",
+    "../assets/favicon.ico"
+]
+identifier = "com.dioxuslabs"
+publisher = "DioxusLabs"
+icon_path = "../assets/favicon.png"
 
 # include `assets` in web platform
 [web.resource]
@@ -16,6 +25,7 @@ style = []
 
 # Additional JavaScript files
 script = []
+
 
 [web.resource.dev]
 

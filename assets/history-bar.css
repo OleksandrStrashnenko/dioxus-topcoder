@@ -1,0 +1,17 @@
+#history-bar {
+    max-width: 200px;
+    align-items: end;
+    margin-right: 0;
+    float: right;
+    overflow-x: hidden;
+    transition: max-width 0.3s ease;
+}
+
+#history-bar.active {
+    max-width: 0;
+}
+
+#collapse-button {
+    width: 30px;
+    height: 30px;
+}

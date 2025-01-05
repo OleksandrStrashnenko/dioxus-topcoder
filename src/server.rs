@@ -1,8 +1,9 @@
 use dioxus::fullstack::ServeConfigBuilder;
 use dioxus::prelude::DioxusRouterExt;
-use crate::App;
+use crate::components::app::App;
 
 #[cfg(feature = "server")]
+#[allow(dead_code)]
 pub(crate) async fn launch_server() {
     // Connect to dioxus' logging infrastructure
     dioxus::logger::initialize_default();
