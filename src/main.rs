@@ -1,4 +1,5 @@
 use dioxus::events::keyboard_types::webdriver::KeyInputState;
+use dioxus::html::meta::charset;
 use dioxus::logger::tracing::log;
 // use axum::ServiceExt;
 use dioxus::prelude::*;
@@ -9,6 +10,8 @@ use serde_json::{json, Value};
 #[cfg(feature = "server")]
 mod server;
 mod translate;
+mod components;
+use components::history::HistoryItem;
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
@@ -50,12 +53,13 @@ fn App() -> Element {
     rsx! {
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
+        document::Meta { charset: "utf-8" }
         Hero {}
     }
 }
 
 // #[server]
-async fn save_translation(src: String, translated: String) -> Result<(), ServerFnError> {
+async fn save_translation(src: &String, translated: String) -> Result<(), ServerFnError> {
     DB.with(|f| f.execute("INSERT INTO dictionary(original, translated) VALUES (?1, ?2) ON CONFLICT(original) DO NOTHING;", &[&src, &translated]))?;
     Ok(())
 }
@@ -74,10 +78,12 @@ fn build_rpc_request(text: &str, dest: &str, src: &str) -> String {
 //
 #[component]
 pub fn Hero() -> Element {
-    let mut trans = use_signal(|| "".to_string());
+    let mut trans = use_signal(|| "Translated".to_string());
+    let mut history_list: Signal<Vec<HistoryItem>> = use_signal(|| vec![]);
     let handle_key_down = move |evt: Event<FormData>| async move {
         let src = evt.data().value();
         if src.is_empty() {
+            trans.set("Translated".into());
             return;
         }
         let query_result: Result<String, rusqlite::Error> = DB.with(
@@ -89,12 +95,15 @@ pub fn Hero() -> Element {
                 })
         );
         match query_result {
-            Ok(translated) => trans.set(translated),
+            Ok(translated) => {
+                history_list.push(HistoryItem::new(src.clone(), translated.clone()));
+                trans.set(translated)
+            },
             Err(e) => {
                 let translation = match translate::translate(&src).await {
                     Some(translation) => {
                         if let Some(translated) = translation.translated.as_str() {
-                            if let Err(err) = save_translation(src, String::from(translated)).await {
+                            if let Err(err) = save_translation(&src, String::from(translated)).await {
                                 eprintln!("Error: {err}");
                             };
                             trans.set(translated.into());
@@ -106,13 +115,30 @@ pub fn Hero() -> Element {
                 };
             }
         }
-
     };
     rsx! {
         div {
             id: "working-panel",
-            input { id: "source-text-to-translate", oninput: handle_key_down }
-            div { id: "translated", "{trans}"}
+            input {
+                id: "source-text-to-translate",
+                class: "working-div",
+                background_color: "white",
+                oninput: handle_key_down
+            }
+            div { class: "working-div",
+                id: "translated",
+                "{trans}"
+            }
+        }
+        div {
+            table {
+                for item in history_list.iter() {
+                    tr {
+                        td { "{item.src()}" }
+                        td { "{item.translated()}" }
+                    }
+                }
+            }
         }
     }
 }

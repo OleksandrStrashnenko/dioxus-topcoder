@@ -1,4 +1,4 @@
- use serde_json::Value;
+use serde_json::Value;
 use crate::{build_rpc_request};
 
 const RPC_ID: &str = "MkEWBc";
