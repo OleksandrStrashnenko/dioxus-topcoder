@@ -12,6 +12,7 @@ mod server;
 mod translate;
 mod components;
 use components::history::HistoryItem;
+use crate::components::history::HistoryBar;
 use crate::translate::translate_from_db_or_google;
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
@@ -51,11 +52,16 @@ thread_local! {
 
 // #[component]
 fn App() -> Element {
+    // let mut history_list: Signal<Vec<HistoryItem>> = use_signal(|| vec![]);
+    use_context_provider(|| Signal::<Vec<HistoryItem>>::new(vec![]));
     rsx! {
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
         document::Meta { charset: "utf-8" }
-        Hero {}
+        div { id: "body",
+            WorkingPanel {}
+            HistoryBar {}
+        }
     }
 }
 
@@ -78,9 +84,9 @@ fn build_rpc_request(text: &str, dest: &str, src: &str) -> String {
 }
 //
 #[component]
-pub fn Hero() -> Element {
+pub fn WorkingPanel() -> Element {
     let mut trans = use_signal(|| "Translated".to_string());
-    let mut history_list: Signal<Vec<HistoryItem>> = use_signal(|| vec![]);
+    let mut history_list: Signal<Vec<HistoryItem>> = use_context::<Signal<Vec<HistoryItem>>>();
     let handle_key_down = move |evt: Event<FormData>| async move {
         let src = evt.data().value();
         match translate_from_db_or_google(&src).await {
@@ -105,16 +111,6 @@ pub fn Hero() -> Element {
             div { class: "working-div",
                 id: "translated",
                 "{trans}"
-            }
-        }
-        div {
-            table {
-                for item in history_list.iter() {
-                    tr {
-                        td { "{item.src()}" }
-                        td { "{item.translated()}" }
-                    }
-                }
             }
         }
     }
