@@ -1,9 +1,46 @@
+use rusqlite::params;
 use serde_json::Value;
-use crate::{build_rpc_request};
+use crate::{build_rpc_request, save_translation, translate, DB};
+use crate::components::history::HistoryItem;
 
 const RPC_ID: &str = "MkEWBc";
 pub(crate) struct Translation {
     pub(crate) translated: Value
+}
+
+pub(crate) async fn translate_from_db_or_google(src: &String) -> Option<String> {
+    if src.is_empty() {
+        return None;
+    }
+
+    let query_result: Result<String, rusqlite::Error> = DB.with(
+        |f| f.query_row(
+            "SELECT (translated) FROM dictionary WHERE original == ?1",
+            params![src],
+            |row| {
+                row.get(0)
+            })
+    );
+
+    match query_result {
+        Ok(translated) => {
+            Some(translated)
+        },
+        Err(e) => {
+            match translate::translate(&src).await {
+                Some(translation) => {
+                    if let Some(translated) = translation.translated.as_str() {
+                        if let Err(err) = save_translation(&src, String::from(translated)).await {
+                            eprintln!("Error: {err}");
+                        };
+                    }
+
+                    Some(translation.translated.to_string())
+                },
+                None => { None }
+            }
+        }
+    }
 }
 
 pub(crate) async fn translate(src: &String) -> Option<Translation> {

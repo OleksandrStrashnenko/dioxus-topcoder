@@ -12,6 +12,7 @@ mod server;
 mod translate;
 mod components;
 use components::history::HistoryItem;
+use crate::translate::translate_from_db_or_google;
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
@@ -82,37 +83,13 @@ pub fn Hero() -> Element {
     let mut history_list: Signal<Vec<HistoryItem>> = use_signal(|| vec![]);
     let handle_key_down = move |evt: Event<FormData>| async move {
         let src = evt.data().value();
-        if src.is_empty() {
-            trans.set("Translated".into());
-            return;
-        }
-        let query_result: Result<String, rusqlite::Error> = DB.with(
-            |f| f.query_row(
-                "SELECT (translated) FROM dictionary WHERE original == ?1",
-                params![src],
-                |row| {
-                    row.get(0)
-                })
-        );
-        match query_result {
-            Ok(translated) => {
-                history_list.push(HistoryItem::new(src.clone(), translated.clone()));
-                trans.set(translated)
+        match translate_from_db_or_google(&src).await {
+            Some(translation) => {
+                trans.set(translation.clone());
+                history_list.push(HistoryItem::new(src.clone(), translation))
             },
-            Err(e) => {
-                let translation = match translate::translate(&src).await {
-                    Some(translation) => {
-                        if let Some(translated) = translation.translated.as_str() {
-                            if let Err(err) = save_translation(&src, String::from(translated)).await {
-                                eprintln!("Error: {err}");
-                            };
-                            trans.set(translated.into());
-                        }
-
-                        translation
-                    },
-                    None => { return; }
-                };
+            None => {
+                trans.set("Translation".to_string());
             }
         }
     };
