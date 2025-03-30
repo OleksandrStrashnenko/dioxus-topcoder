@@ -1,6 +1,7 @@
+use dioxus::prelude::ServerFnError;
 use rusqlite::params;
-use serde_json::Value;
-use crate::{build_rpc_request, save_translation, translate, DB};
+use serde_json::{json, Value};
+use crate::{translate, DB};
 use crate::components::history::HistoryItem;
 
 const RPC_ID: &str = "MkEWBc";
@@ -26,7 +27,7 @@ pub(crate) async fn translate_from_db_or_google(src: &String) -> Option<String> 
         Ok(translated) => {
             Some(translated)
         },
-        Err(e) => {
+        Err(_e) => {
             match translate::translate(&src).await {
                 Some(translation) => {
                     if let Some(translated) = translation.translated.as_str() {
@@ -117,7 +118,24 @@ pub(crate) async fn translate(src: &String) -> Option<Translation> {
     };
     let translated_parts: Value = serde_json::from_value(parsed[1][0][0][5].clone()).unwrap();
     let translated = translated_parts[0][0].clone();
-    let pronunciation: Result<Value, _> = serde_json::from_value(parsed[1][0][0][1].clone());
+    // let pronunciation: Result<Value, _> = serde_json::from_value(parsed[1][0][0][1].clone());
     println!("translated: {translated}");
     Translation {translated}.into()
+}
+
+// #[server]
+async fn save_translation(src: &String, translated: String) -> Result<(), ServerFnError> {
+    DB.with(|f| f.execute("INSERT INTO dictionary(original, translated) VALUES (?1, ?2) ON CONFLICT(original) DO NOTHING;", &[&src, &translated]))?;
+    Ok(())
+}
+
+fn build_rpc_request(text: &str, dest: &str, src: &str) -> String {
+    json!([[
+        [
+            "MkEWBc",
+            format!("[[{text}, {src}, {dest}, true], [null]]").as_str(),
+            "null",
+            "generic"
+        ]
+    ]]).to_string()
 }

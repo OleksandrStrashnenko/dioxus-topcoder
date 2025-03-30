@@ -1,6 +1,6 @@
 use dioxus::fullstack::ServeConfigBuilder;
 use dioxus::prelude::DioxusRouterExt;
-use crate::App;
+use crate::components::app::App;
 
 #[cfg(feature = "server")]
 pub(crate) async fn launch_server() {

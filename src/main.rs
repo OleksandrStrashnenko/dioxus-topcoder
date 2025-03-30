@@ -1,23 +1,12 @@
-use dioxus::events::keyboard_types::webdriver::KeyInputState;
-use dioxus::html::meta::charset;
-use dioxus::logger::tracing::log;
-// use axum::ServiceExt;
 use dioxus::prelude::*;
-use rusqlite::params;
-use serde_json::{json, Value};
+use crate::components::app::App;
 
-// use serde_json::{json, Value};
 #[cfg(feature = "server")]
 mod server;
 mod translate;
 mod components;
-use components::history::HistoryItem;
-use crate::components::history::HistoryBar;
-use crate::translate::translate_from_db_or_google;
 
-const FAVICON: Asset = asset!("/assets/favicon.ico");
-const MAIN_CSS: Asset = asset!("/assets/main.css");
-// const HEADER_SVG: Asset = asset!("/assets/header.svg");
+
 #[cfg(feature = "server")]
 #[cfg(not(feature = "desktop"))]
 fn main() {
@@ -50,68 +39,8 @@ thread_local! {
     }
 }
 
-// #[component]
-fn App() -> Element {
-    // let mut history_list: Signal<Vec<HistoryItem>> = use_signal(|| vec![]);
-    use_context_provider(|| Signal::<Vec<HistoryItem>>::new(vec![]));
-    rsx! {
-        document::Link { rel: "icon", href: FAVICON }
-        document::Link { rel: "stylesheet", href: MAIN_CSS }
-        document::Meta { charset: "utf-8" }
-        div { id: "body",
-            WorkingPanel {}
-            HistoryBar {}
-        }
-    }
-}
-
-// #[server]
-async fn save_translation(src: &String, translated: String) -> Result<(), ServerFnError> {
-    DB.with(|f| f.execute("INSERT INTO dictionary(original, translated) VALUES (?1, ?2) ON CONFLICT(original) DO NOTHING;", &[&src, &translated]))?;
-    Ok(())
-}
 
 
-fn build_rpc_request(text: &str, dest: &str, src: &str) -> String {
-    json!([[
-        [
-            "MkEWBc",
-            format!("[[{text}, {src}, {dest}, true], [null]]").as_str(),
-            "null",
-            "generic"
-        ]
-    ]]).to_string()
-}
-//
-#[component]
-pub fn WorkingPanel() -> Element {
-    let mut trans = use_signal(|| "Translated".to_string());
-    let mut history_list: Signal<Vec<HistoryItem>> = use_context::<Signal<Vec<HistoryItem>>>();
-    let handle_key_down = move |evt: Event<FormData>| async move {
-        let src = evt.data().value();
-        match translate_from_db_or_google(&src).await {
-            Some(translation) => {
-                trans.set(translation.clone());
-                history_list.push(HistoryItem::new(src.clone(), translation))
-            },
-            None => {
-                trans.set("Translation".to_string());
-            }
-        }
-    };
-    rsx! {
-        div {
-            id: "working-panel",
-            input {
-                id: "source-text-to-translate",
-                class: "working-div",
-                background_color: "white",
-                oninput: handle_key_down
-            }
-            div { class: "working-div",
-                id: "translated",
-                "{trans}"
-            }
-        }
-    }
-}
+
+
+
