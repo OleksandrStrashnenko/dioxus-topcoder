@@ -1,15 +1,15 @@
 use dioxus::prelude::ServerFnError;
 use rusqlite::params;
 use serde_json::{json, Value};
-use crate::{translate, DB};
-use crate::components::history::HistoryItem;
+use crate::{DB};
+use std::*;
 
 const RPC_ID: &str = "MkEWBc";
 pub(crate) struct Translation {
     pub(crate) translated: Value
 }
 
-pub(crate) async fn translate_from_db_or_google(src: &String) -> Option<String> {
+pub async fn translate_from_db_or_google(src: &String) -> Option<String> {
     if src.is_empty() {
         return None;
     }
@@ -28,7 +28,7 @@ pub(crate) async fn translate_from_db_or_google(src: &String) -> Option<String> 
             Some(translated)
         },
         Err(_e) => {
-            match translate::translate(&src).await {
+            match translate(&src).await {
                 Some(translation) => {
                     if let Some(translated) = translation.translated.as_str() {
                         if let Err(err) = save_translation(&src, String::from(translated)).await {
@@ -44,7 +44,7 @@ pub(crate) async fn translate_from_db_or_google(src: &String) -> Option<String> 
     }
 }
 
-pub(crate) async fn translate(src: &String) -> Option<Translation> {
+pub async fn translate(src: &String) -> Option<Translation> {
     let client = reqwest::Client::new();
     let response = client
         .post("https://translate.google.com/_/TranslateWebserverUi/data/batchexecute?rpcids=MkEWBc&bl=boq_translate-webserver_20201207.13_p0&soc-app=1&soc-platform=1&soc-device=1&rt=c")

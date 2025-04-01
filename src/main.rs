@@ -6,7 +6,6 @@ mod server;
 mod translate;
 mod components;
 
-
 #[cfg(feature = "server")]
 #[cfg(not(feature = "desktop"))]
 fn main() {

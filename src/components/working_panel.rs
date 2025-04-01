@@ -5,11 +5,13 @@ use dioxus::hooks::{use_context, use_signal};
 use dioxus::prelude::*;
 use dioxus::signals::WritableVecExt;
 use crate::components::history::HistoryItem;
-use crate::translate::translate_from_db_or_google;
+use crate::translate::translate::translate_from_db_or_google;
+
+const TRANSLATED: &str = "Translated";
 
 #[component]
 pub fn WorkingPanel() -> Element {
-    let mut trans = use_signal(|| "Translated".to_string());
+    let mut trans = use_signal(|| TRANSLATED.to_string());
     let mut history_list: Signal<Vec<HistoryItem>> = use_context::<Signal<Vec<HistoryItem>>>();
     let handle_key_down = move |evt: Event<FormData>| async move {
         let src = evt.data().value();
