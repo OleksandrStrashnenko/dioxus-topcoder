@@ -1,5 +1,8 @@
 use dioxus::prelude::*;
+use dioxus::desktop::*;
 use crate::components::app::App;
+use dioxus::desktop::tao;
+use dioxus::logger::tracing::Instrument;
 
 #[cfg(feature = "server")]
 mod server;
@@ -17,7 +20,13 @@ fn main() {
 
 #[cfg(feature = "desktop")]
 fn main() {
-    dioxus::launch(App);
+    // let icon = tao::window::Icon::from_rgba(include_bytes!("../assets/favicon.ico").to_vec(), 256, 256).unwrap();
+    LaunchBuilder::new()
+        .with_cfg(
+            Config::new()
+                .with_menu(None)
+        )
+        .launch(App);
 }
 
 

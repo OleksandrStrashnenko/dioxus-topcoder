@@ -4,11 +4,12 @@ use dioxus::document;
 use dioxus::hooks::use_context_provider;
 use dioxus::prelude::*;
 use crate::components::history::{HistoryBar, HistoryItem};
-use crate::components::working_panel::WorkingPanel;
+use crate::components::working_panel::working_panel::WorkingPanel;
 
 // const FAVICON: Asset = asset!("/assets/favicon.ico");
 const FAVICON: Asset = asset!("/assets/favicon.png");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
+const WORKING_PANEL_CSS: Asset = asset!("/assets/working-panel.css");
 // const FAVICON_TYPE = html::image::r#type("image/x-icon");
 const HEADER_SVG: Asset = asset!("/assets/header.svg");
 
@@ -19,8 +20,9 @@ pub fn App() -> Element {
     // let mut history_list: Signal<Vec<HistoryItem>> = use_signal(|| vec![]);
     use_context_provider(|| Signal::<Vec<HistoryItem>>::new(vec![]));
     rsx! {
-        document::Link { rel: "icon", href: FAVICON}
+        document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
+        document::Link { rel: "stylesheet", href: WORKING_PANEL_CSS }
         document::Meta { charset: "utf-8" }
         div { id: "body",
             WorkingPanel {}

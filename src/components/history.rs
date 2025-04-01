@@ -24,8 +24,7 @@ impl HistoryItem {
 pub(crate) fn HistoryBar() -> Element {
     let history_list = use_context::<Signal<Vec<HistoryItem>>>();
     rsx! {
-        div {
-            id: "history-bar",
+        div { id: "history-bar",
             h1 { "History" }
             div {
                 table {

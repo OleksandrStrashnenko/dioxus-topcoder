@@ -26,18 +26,17 @@ pub fn WorkingPanel() -> Element {
         }
     };
     rsx! {
-        div {
-            id: "working-panel",
-            input {
-                id: "source-text-to-translate",
-                class: "working-div",
-                background_color: "white",
-                oninput: handle_key_down
+        div { id: "working-panel", class: "white rounded",
+            div { id: "source-input",
+                button { "languages" }
+                textarea {
+                    id: "source-text-to-translate",
+                    class: "working-div",
+                    background_color: "white",
+                    oninput: handle_key_down,
+                }
             }
-            div { class: "working-div",
-                id: "translated",
-                "{trans}"
-            }
+            div { class: "working-div", id: "translated", "{trans}" }
         }
     }
 }

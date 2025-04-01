@@ -1,0 +1,28 @@
+#working-panel {
+    width: 70%;
+    max-height: 200px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    margin-left: auto;
+}
+
+#source-input {
+    display: flex;
+    flex-direction: column;
+}
+textarea {
+    display: block;
+    overflow-y: hidden;
+    resize: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+#source-input-to-translate {
+    height: 100%;
+}
+#source-input {
+    height: 100%;
+}
