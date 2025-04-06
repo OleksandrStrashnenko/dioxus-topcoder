@@ -1,2 +1,2 @@
 pub mod translate;
-mod language_codes;
+pub mod language_codes;

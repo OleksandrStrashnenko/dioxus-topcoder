@@ -11,6 +11,7 @@ const FAVICON: Asset = asset!("/assets/favicon.png");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
 const WORKING_PANEL_CSS: Asset = asset!("/assets/working-panel.css");
 // const FAVICON_TYPE = html::image::r#type("image/x-icon");
+const BOOTSTRAP_CSS: Asset = asset!("/assets/bootstrap-5.3.5/dist/css/bootstrap.css");
 const HEADER_SVG: Asset = asset!("/assets/header.svg");
 
 // #[component]
@@ -22,6 +23,7 @@ pub fn App() -> Element {
     rsx! {
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
+        document::Link { rel: "stylesheet", href: BOOTSTRAP_CSS }
         document::Link { rel: "stylesheet", href: WORKING_PANEL_CSS }
         document::Meta { charset: "utf-8" }
         div { id: "body",

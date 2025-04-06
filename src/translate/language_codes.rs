@@ -1,6 +1,6 @@
 use strum::{IntoEnumIterator};
 use strum_macros::EnumIter;
-#[derive(EnumIter)]
+#[derive(EnumIter, Debug)]
 pub enum LanguageCode {
     Abkhaz,
     Acehnese,
@@ -199,7 +199,7 @@ pub enum LanguageCode {
 }
 
 impl LanguageCode {
-    fn values() -> Vec<LanguageCode> {
+    pub fn values() -> Vec<LanguageCode> {
         LanguageCode::iter().collect()
     }
     fn get_code(&self) -> &'static str {
