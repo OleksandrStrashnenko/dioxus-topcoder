@@ -20,13 +20,9 @@ pub fn CardsPanel() -> Element {
                     id: "card-{cardId}",
                     draggable: true,
                     width: "100px",
-                    // ondrag: move |e| { println!("ondrag: {:?}", e) },
-                    ondragstart: move |e| { println!("dragstart: {:?}", e) },
-                    ondragenter: move |e| { e.prevent_default(); println!("enter: {:?}", e); },
-                    ondragover: move |e| { e.prevent_default(); println!("over: {:?}", e); },
-                    ondragleave: move |e| { println!("leave: {:?}", e) },
+                    ondragstart: move |e| {println!("dragstart: {:?}", e)},
                     ondragend: move |e| { println!("dragend: {:?}", e) },
-                    ondrop: move |e| { e.prevent_default(); println!("drop: {:?}", e) },
+
                     class: "card",
                     style: "margin: 10px",
                     "{card}"
@@ -39,6 +35,7 @@ pub fn CardsPanel() -> Element {
                 ondragenter: move |e| { e.prevent_default(); println!("enter: {:?}", e);  },
                 ondragover: move |e| { e.prevent_default(); println!("over: {:?}", e); },
                 ondragleave: move |e| { println!("leave: {:?}", e) },
+                ondrop: move |e| { e.prevent_default(); println!("drop: {:?}", e) },
                 "vodka"
             }
         }
