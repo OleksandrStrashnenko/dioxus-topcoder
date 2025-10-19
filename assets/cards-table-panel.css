@@ -3,7 +3,12 @@
     padding: 8px;
     margin-bottom: 8px;
     border-radius: 4px;
-    /*cursor: grab;*/
-    /*user-select: none;*/
-    position: relative;
+    cursor: grab;
+}
+
+[draggable="true"] {
+    cursor: grab !important;
+}
+[draggable="true"]:active {
+    cursor: grabbing !important;
 }

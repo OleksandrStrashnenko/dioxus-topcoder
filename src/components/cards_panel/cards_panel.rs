@@ -1,11 +1,6 @@
-use std::thread::Scope;
 use dioxus::core_macro::{component, rsx};
-use dioxus::dioxus_core::{Element, Event};
+use dioxus::dioxus_core::Element;
 use dioxus::prelude::*;
-use wasm_bindgen::prelude::wasm_bindgen;
-use wasm_bindgen::JsCast;
-use web_sys::HtmlElement;
-
 
 #[component]
 pub fn CardsPanel() -> Element {
@@ -15,14 +10,17 @@ pub fn CardsPanel() -> Element {
         div {
             id: "{container_id}",
             style: "list-style-type: none; padding: 10px;",
-            for (cardId, card) in cardFakes.iter().enumerate() {
+            for (cardId , card) in cardFakes.iter().enumerate() {
                 div {
                     id: "card-{cardId}",
                     draggable: true,
                     width: "100px",
-                    ondragstart: move |e| {println!("dragstart: {:?}", e)},
-                    ondragend: move |e| { println!("dragend: {:?}", e) },
-
+                    ondrag: move |e| {},
+                    ondragstart: move |e| { println!("dragstart: {:?}", e) },
+                    ondragend: move |e| {
+                        e.prevent_default();
+                        println!("dragend: {:?}", e)
+                    },
                     class: "card",
                     style: "margin: 10px",
                     "{card}"
@@ -31,12 +29,17 @@ pub fn CardsPanel() -> Element {
             div {
                 id: "drop-t",
                 height: "200px",
-                ondrag: move |e| { e.prevent_default(); println!("ondrag: {:?}", e) },
-                ondragenter: move |e| { e.prevent_default(); println!("enter: {:?}", e);  },
-                ondragover: move |e| { e.prevent_default(); println!("over: {:?}", e); },
-                ondragleave: move |e| { println!("leave: {:?}", e) },
-                ondrop: move |e| { e.prevent_default(); println!("drop: {:?}", e) },
-                "vodka"
+                draggable: true,
+                ondrag: move |e| { println!("ondrag: {:?}", e) },
+                ondragenter: move |e| {
+                    println!("enter: {:?}", e);
+                },
+                ondragover: move |e| {
+                    println!("over: {:?}", e);
+                },
+                ondragleave: move |e| {},
+                ondrop: move |e| { println!("drop: {:?}", e) },
+                "test"
             }
         }
     }

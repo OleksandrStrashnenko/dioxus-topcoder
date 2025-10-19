@@ -1,7 +1,7 @@
 [package]
 name = "learn-dioxus"
 version = "0.1.0"
-authors = ["Oleksandr <o.strashnenko@steel.mil.ua>"]
+authors = ["Oleksandr <n0naimatall@gmail.com>"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -9,21 +9,13 @@ edition = "2021"
 [dependencies]
 axum = { version = "0.7", features = ["tokio", "http1"], optional = true}
 dioxus = { version = "0.6.3", features = ["router", "fullstack"] }
-dioxus-cli-config = "0.6.1"
-num-derive = "0.4.2"
+#dioxus = { git = "https://github.com/DioxusLabs/dioxus", branch = "main", features = ["router", "fullstack"]}
 reqwest = { version = "0.12.12", features = ["json"] }
-rusqlite = { version = "0.32.1"}
-serde = { version = "1.0.217", features = ["derive"] }
+rusqlite = { version = "0.37.0" }
 serde_json = "1.0.134"
 strum = "0.27.1"
 tokio = "1.42.0"
-num-traits = "0.2.19"
 strum_macros = "0.27.1"
-winit = "0.30.9"
-gloo-utils = "0.2.0"
-wasm-bindgen = "0.2.100"
-web-sys = "0.3.77"
-js-sys = "0.3.77"
 
 
 [features]
@@ -44,3 +36,4 @@ inherits = "dev"
 
 [profile.android-dev]
 inherits = "dev"
+
