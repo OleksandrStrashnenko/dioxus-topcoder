@@ -1,5 +1,5 @@
-pub mod translate;
 pub mod components;
+pub mod translate;
 
 thread_local! {
     pub static DB: rusqlite::Connection = {

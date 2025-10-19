@@ -2,6 +2,6 @@
 
 for (var draggable of document.querySelectorAll('[draggable="true"]')) {
     draggable.addEventListener("dragstart", (e) => {
-        e.dataTransfer.setData("", "")
+        e.dataTransfer.setData("text/plain", e.target.id);
     });
 }

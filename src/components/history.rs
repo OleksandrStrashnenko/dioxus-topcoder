@@ -3,12 +3,12 @@ use dioxus::prelude::*;
 
 pub struct HistoryItem {
     src: String,
-    translated: String
+    translated: String,
 }
 
 impl HistoryItem {
     pub fn new(src: String, translated: String) -> Self {
-        HistoryItem {src, translated}
+        HistoryItem { src, translated }
     }
 
     pub fn src(&self) -> &String {
@@ -20,13 +20,12 @@ impl HistoryItem {
     }
 }
 
-
 #[component]
 pub(crate) fn HistoryBar() -> Element {
     let history_list = use_context::<Signal<Vec<HistoryItem>>>();
     let mut collapse_active = use_signal(|| "active");
     let mut chevron = use_signal(|| chevron_left());
-    let onclick = move |_| async move{
+    let onclick = move |_| async move {
         if collapse_active() == "" {
             collapse_active.set("active");
             chevron.set(chevron_left());

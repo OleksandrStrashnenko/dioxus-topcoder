@@ -77,11 +77,19 @@ mod tests {
         // Test that all language codes are non-empty strings
         for language in LanguageCode::values() {
             let code = language.get_code();
-            assert!(!code.is_empty(), "Language code for {:?} is empty", language);
+            assert!(
+                !code.is_empty(),
+                "Language code for {:?} is empty",
+                language
+            );
 
             // Check that codes follow expected format (letters, hyphens, or BCP-47 format)
-            assert!(code.chars().all(|c| c.is_ascii_alphabetic() || c == '-'), 
-                "Language code '{}' for {:?} contains invalid characters", code, language);
+            assert!(
+                code.chars().all(|c| c.is_ascii_alphabetic() || c == '-'),
+                "Language code '{}' for {:?} contains invalid characters",
+                code,
+                language
+            );
         }
     }
 

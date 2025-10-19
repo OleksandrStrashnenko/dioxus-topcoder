@@ -1,12 +1,12 @@
+use crate::components::history::HistoryItem;
+use crate::translate::language_codes::LanguageCode;
+use crate::translate::translate::translate_from_db_or_google;
 use dioxus::core_macro::{component, rsx};
 use dioxus::dioxus_core::{Element, Event};
 use dioxus::events::FormData;
 use dioxus::hooks::{use_context, use_signal};
 use dioxus::prelude::*;
 use dioxus::signals::WritableVecExt;
-use crate::components::history::HistoryItem;
-use crate::translate::translate::translate_from_db_or_google;
-use crate::translate::language_codes::LanguageCode;
 
 const TRANSLATED: &str = "Translated";
 
@@ -20,7 +20,7 @@ pub fn WorkingPanel() -> Element {
             Some(translation) => {
                 trans.set(translation.clone());
                 history_list.push(HistoryItem::new(src.clone(), translation))
-            },
+            }
             None => {
                 trans.set("Translation".to_string());
             }
@@ -35,8 +35,7 @@ pub fn WorkingPanel() -> Element {
     //     modal_style.set("display: flex".to_string());
     // };
     let handle_on_language_selected = move |_evt: Event<MouseData>, language_code: LanguageCode| async move {
-        async {
-        }.await;
+        async {}.await;
 
         translate_from.set(language_code.clone());
     };

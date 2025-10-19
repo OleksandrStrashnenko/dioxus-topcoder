@@ -1,4 +1,4 @@
-use strum::{IntoEnumIterator};
+use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 #[derive(EnumIter, Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LanguageCode {
@@ -55,7 +55,7 @@ pub enum LanguageCode {
     Estonian,
     Ewe,
     Fijian,
-    FilipinoTagalog,  // or tl
+    FilipinoTagalog, // or tl
     Finnish,
     French,
     FrenchCanadian,
@@ -194,7 +194,7 @@ pub enum LanguageCode {
     Yiddish,
     Yoruba,
     YucatecMaya,
-    Zulu
+    Zulu,
 }
 
 impl LanguageCode {
@@ -257,7 +257,7 @@ impl LanguageCode {
             Self::Estonian => "et",
             Self::Ewe => "ee",
             Self::Fijian => "fj",
-            Self::FilipinoTagalog => "fil",  // or tl
+            Self::FilipinoTagalog => "fil", // or tl
             Self::Finnish => "fi",
             Self::French => "fr",
             Self::FrenchCanadian => "fr-CA",
@@ -396,7 +396,7 @@ impl LanguageCode {
             Self::Yiddish => "yi",
             Self::Yoruba => "yo",
             Self::YucatecMaya => "yua",
-            Self::Zulu => "zu"
+            Self::Zulu => "zu",
         }
     }
 }
