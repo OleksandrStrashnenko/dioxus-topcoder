@@ -71,9 +71,11 @@ pub fn App() -> Element {
             include_bytes!("../../assets/favicon.ico").to_vec(),
         ));
     });
-    // use_asset_handler(BOOTSTRAP_CSS, |_, responder| {
-    //     // responder.respond(Response::new(include_bytes!("../../assets/bootstrap-5.3.5/dist/css/bootstrap.css").to_vec()));
-    // });
+    use_asset_handler(BOOTSTRAP_CSS, |_, responder| {
+        responder.respond(Response::new(
+            include_bytes!("../../assets/bootstrap-5.3.5/dist/css/bootstrap.css").to_vec(),
+        ));
+    });
     // use_asset_handler(BOOTSTRAP_CSS_MAP, |_, responder| {
     //     // responder.respond(Response::new(include_bytes!("../../assets/bootstrap-5.3.5/dist/css/bootstrap.css.map").to_vec()));
     // });
