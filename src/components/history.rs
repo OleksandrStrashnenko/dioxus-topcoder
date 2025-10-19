@@ -44,14 +44,14 @@ pub(crate) fn HistoryBar() -> Element {
             onclick,
             {chevron}
         }
-        div { id: "history-bar", class: "{collapse_active} width-100",
+        div { id: "history-bar", class: "{collapse_active} width-100 overflow-y-auto",
             h1 { "History" }
             div {
                 table {
                     for item in history_list.iter() {
                         tr {
-                            td { "{item.src()}" }
-                            td { "{item.translated()}" }
+                            td { class: "font-normal", "{item.src()}" }
+                            td { class: "font-normal", "{item.translated()}" }
                         }
                     }
                 }

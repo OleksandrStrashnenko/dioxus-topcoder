@@ -173,8 +173,9 @@ pub fn App() -> Element {
             link { rel: "stylesheet", href: HISTORY_BAR_CSS }
         }
         document::Meta { charset: "utf-8" }
-        div { id: "body",
-            div { class: "width-100 flex-column justify-content-center",
+        div {
+            id: "body",
+            div { class: "width-100 flex-column justify-content-start",
                 WorkingPanel {}
                 CardsPanel {}
             }
