@@ -44,7 +44,9 @@ pub(crate) fn HistoryBar() -> Element {
             onclick,
             {chevron}
         }
-        div { id: "history-bar", class: "{collapse_active} width-100 overflow-y-auto",
+        div {
+            id: "history-bar",
+            class: "{collapse_active} width-100 overflow-y-auto",
             h1 { "History" }
             div {
                 table {

@@ -7,8 +7,12 @@ use dioxus::events::FormData;
 use dioxus::hooks::{use_context, use_signal};
 use dioxus::prelude::*;
 use dioxus::signals::WritableVecExt;
-
 const TRANSLATED: &str = "Translated";
+
+enum Target {
+    TO,
+    FROM
+}
 
 #[component]
 pub fn WorkingPanel() -> Element {
@@ -26,35 +30,30 @@ pub fn WorkingPanel() -> Element {
             }
         }
     };
-    let mut translate_from = use_signal(|| LanguageCode::English);
-    // let mut modal_style = use_signal(|| "".to_string());
-    // let handle_on_language_select_clicked = move|evt: Event<MouseData>| async move {
-    //     async {
-    //
-    //     }.await;
-    //     modal_style.set("display: flex".to_string());
-    // };
-    let handle_on_language_selected = move |_evt: Event<MouseData>, language_code: LanguageCode| async move {
-        async {}.await;
 
-        translate_from.set(language_code.clone());
+    let mut translate_from = use_signal(|| LanguageCode::English);
+    let mut translate_to = use_signal(|| LanguageCode::Ukrainian);
+    let mut target = use_signal(|| Target::TO);
+    let handle_language_selected = move |_evt: Event<MouseData>, language_code: LanguageCode| async move {
+        async {}.await;
+        match *target.read() {
+            Target::FROM => {
+                translate_from.set(language_code.clone());
+            },
+            Target::TO => {
+                translate_to.set(language_code.clone());
+            }
+        }
     };
-    // let mouse_down = move |evt: Event<MouseData>| async move {
-    //     async {
-    //
-    //     }.await;
-    //     let modal = gloo_utils::document().get_element_by_id("modal").unwrap();
-    //     if !modal.contains(Some(evt.data.)) {
-    //         modal_style.set("display: none".to_string());
-    //     }
-    // };
+    let mut handle_language_select_clicked = move |_target: Target| {
+        target.set(_target);
+    };
     rsx! {
         div {
             class: "modal",
             "aria-hidden": "true",
             id: "modal",
             tabindex: "-1",
-            // style: modal_style,
             div { class: "modal-dialog modal-dialog-centered",
                 div { class: "modal-content",
                     div { class: "modal-header",
@@ -65,7 +64,7 @@ pub fn WorkingPanel() -> Element {
                             button {
                                 class: "lang-select",
                                 "data-bs-dismiss": "modal",
-                                onclick: move |e| { handle_on_language_selected(e.clone(), language) },
+                                onclick: move |e| { handle_language_selected(e.clone(), language) },
                                 "{language:?}"
                             }
                         }
@@ -80,7 +79,7 @@ pub fn WorkingPanel() -> Element {
                     class: "btn dropdown-toggle",
                     "data-bs-toggle": "modal",
                     "data-bs-target": "#modal",
-                    // onclick: handle_on_language_select_clicked,
+                    onclick: move |e| { handle_language_select_clicked(Target::FROM) },
                     "{translate_from:?}"
                 }
                 textarea {
@@ -90,7 +89,14 @@ pub fn WorkingPanel() -> Element {
                 }
             }
             div { class: "full-high", id: "target",
-                button { r#type: "button", class: "btn dropdown-toggle", "Languages" }
+                button {
+                    r#type: "button",
+                    class: "btn dropdown-toggle",
+                    "data-bs-toggle": "modal",
+                    "data-bs-target": "#modal",
+                    onclick: move |e| { handle_language_select_clicked(Target::TO) },
+                    "{translate_to:?}"
+                }
                 div { class: "working-div", id: "translated", "{trans}" }
             }
         }
