@@ -11,7 +11,7 @@ const TRANSLATED: &str = "Translated";
 
 enum Target {
     TO,
-    FROM
+    FROM,
 }
 
 #[component]
@@ -39,7 +39,7 @@ pub fn WorkingPanel() -> Element {
         match *target.read() {
             Target::FROM => {
                 translate_from.set(language_code.clone());
-            },
+            }
             Target::TO => {
                 translate_to.set(language_code.clone());
             }
@@ -79,7 +79,7 @@ pub fn WorkingPanel() -> Element {
                     class: "btn dropdown-toggle",
                     "data-bs-toggle": "modal",
                     "data-bs-target": "#modal",
-                    onclick: move |e| { handle_language_select_clicked(Target::FROM) },
+                    onclick: move |_e| { handle_language_select_clicked(Target::FROM) },
                     "{translate_from:?}"
                 }
                 textarea {
@@ -94,7 +94,7 @@ pub fn WorkingPanel() -> Element {
                     class: "btn dropdown-toggle",
                     "data-bs-toggle": "modal",
                     "data-bs-target": "#modal",
-                    onclick: move |e| { handle_language_select_clicked(Target::TO) },
+                    onclick: move |_e| { handle_language_select_clicked(Target::TO) },
                     "{translate_to:?}"
                 }
                 div { class: "working-div", id: "translated", "{trans}" }

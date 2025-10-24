@@ -3,6 +3,7 @@ use dioxus::desktop::*;
 use dioxus::prelude::*;
 
 mod components;
+mod quiz_service;
 #[cfg(feature = "server")]
 mod server;
 mod translate;

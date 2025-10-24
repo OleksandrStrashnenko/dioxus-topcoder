@@ -1,4 +1,5 @@
 pub mod components;
+pub mod quiz_service;
 pub mod translate;
 
 thread_local! {

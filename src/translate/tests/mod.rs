@@ -1,4 +1,4 @@
-//! Tests for the translate module
+//! Tests for the "translate" module
 
 #[cfg(test)]
 mod translate_tests {

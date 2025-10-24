@@ -1,30 +1,33 @@
+use crate::components::cards_panel::draggable_card::Card;
+use crate::components::history::HistoryItem;
 use dioxus::core_macro::{component, rsx};
 use dioxus::dioxus_core::Element;
 use dioxus::prelude::*;
+use std::sync::Arc;
 
 #[component]
 pub fn CardsPanel() -> Element {
     let container_id = "sortable-list";
-    let cardFakes = vec!["First", "Fake", "Last"];
+    let mut index = use_context::<Signal<Option<usize>>>();
+    let mut cards: Signal<Arc<Vec<(String, String)>>> =
+        use_context::<Signal<Arc<Vec<(String, String)>>>>();
+    let ondrop = move |_e| {
+        if let Some(i) = index() {
+            let history_item = use_context::<Signal<Vec<HistoryItem>>>()();
+            if let Some(item) = history_item.get(i) {
+                Arc::<Vec<(String, String)>>::make_mut(&mut cards.write())
+                    .push((item.src.clone(), item.translated.clone()));
+                index.set(None);
+            }
+        }
+    };
     rsx! {
         div {
             id: "{container_id}",
             style: "list-style-type: none; padding: 10px;",
-            for (cardId , card) in cardFakes.iter().enumerate() {
-                div {
-                    id: "card-{cardId}",
-                    draggable: true,
-                    width: "100px",
-                    ondrag: move |e| {},
-                    ondragstart: move |e| { println!("dragstart: {:?}", e) },
-                    ondragend: move |e| {
-                        e.prevent_default();
-                        println!("dragend: {:?}", e)
-                    },
-                    class: "card",
-                    style: "margin: 10px",
-                    "{card}"
-                }
+            ondrop,
+            for (cardId , (c1 , c2)) in cards.read().iter().enumerate() {
+                Card { id: cardId, content: "{c1} {c2}" }
             }
             div {
                 id: "drop-t",
@@ -37,8 +40,12 @@ pub fn CardsPanel() -> Element {
                 ondragover: move |e| {
                     println!("over: {:?}", e);
                 },
-                ondragleave: move |e| {},
-                ondrop: move |e| { println!("drop: {:?}", e) },
+                ondragleave: move |e| {
+                    println!("leave: {:?}", e);
+                },
+                ondrop: move |e| {
+                    println!("drop: {:?}", e);
+                },
                 "test"
             }
         }
