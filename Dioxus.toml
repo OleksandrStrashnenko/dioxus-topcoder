@@ -21,7 +21,9 @@ icon_path = "../assets/favicon.png"
 [web.resource]
 
 # Additional CSS style files
-style = []
+style = [
+    "../assets/quiz.css"
+]
 
 # Additional JavaScript files
 script = []

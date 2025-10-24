@@ -35,6 +35,10 @@ body {
     margin: 20px;
 }
 
+td {
+    text-align: center;
+}
+
 #links {
     width: 400px;
     text-align: left;

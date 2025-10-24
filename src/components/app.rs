@@ -1,6 +1,5 @@
-use crate::components::cards_panel::cards_panel::CardsPanel;
-use crate::components::history::{HistoryBar, HistoryItem};
-use crate::components::working_panel::working_panel::WorkingPanel;
+use crate::components::history::HistoryItem;
+use crate::components::mode_node_screen::mode_node::ModeNode;
 use axum::response::Response;
 use dioxus::core_macro::{component, rsx};
 use dioxus::desktop::use_asset_handler;
@@ -13,23 +12,24 @@ const MAIN_CSS: &str = "main.css";
 const WORKING_PANEL_CSS: &str = "working-panel.css";
 const HISTORY_BAR_CSS: &str = "history-bar.css";
 const CARDS_PANEL_CSS: &str = "cards-table-panel.css";
+const QUIZ_CSS: &str = "quiz.css";
 const FAVICON: &str = "favicon.png";
 const FAVICON_ICO: &str = "favicon.ico";
 const BOOTSTRAP_CSS: &str = "bootstrap.css";
-const BOOTSTRAP_CSS_MAP: &str = "bootstrap.css.map";
-const BOOTSTRAP_RTL_CSS: &str = "bootstrap.rtl.css";
-const BOOTSTRAP_GRID_CSS: &str = "bootstrap-grid.css";
-const BOOTSTRAP_GRID_RTL_CSS: &str = "bootstrap-grid.rtl.css";
-const BOOTSTRAP_REBOOT_CSS: &str = "bootstrap-reboot.css";
-const BOOTSTRAP_REBOOT_RTL_CSS: &str = "bootstrap-reboot.rtl.css";
-const BOOTSTRAP_UTILITIES_CSS: &str = "bootstrap-utilities.css";
-const BOOTSTRAP_UTILITIES_RTL_CSS: &str = "bootstrap-utilities.rtl.css";
+// const BOOTSTRAP_CSS_MAP: &str = "bootstrap.css.map";
+// const BOOTSTRAP_RTL_CSS: &str = "bootstrap.rtl.css";
+// const BOOTSTRAP_GRID_CSS: &str = "bootstrap-grid.css";
+// const BOOTSTRAP_GRID_RTL_CSS: &str = "bootstrap-grid.rtl.css";
+// const BOOTSTRAP_REBOOT_CSS: &str = "bootstrap-reboot.css";
+// const BOOTSTRAP_REBOOT_RTL_CSS: &str = "bootstrap-reboot.rtl.css";
+// const BOOTSTRAP_UTILITIES_CSS: &str = "bootstrap-utilities.css";
+// const BOOTSTRAP_UTILITIES_RTL_CSS: &str = "bootstrap-utilities.rtl.css";
 const HEADER_SVG: &str = "header.svg";
 const BOOSTRAP_JS: &str = "bootstrap.js";
-const BOOSTRAP_ESM_JS: &str = "bootstrap.esm.js";
+// const BOOSTRAP_ESM_JS: &str = "bootstrap.esm.js";
 const BOOSTRAP_BUNDLE_JS: &str = "bootstrap.bundle.js";
-const BOOSTRAP_BUNDLE_JS_MAP: &str = "bootstrap.bundle.min.js.map";
-const BOOTSTRAP_ICONS_SVG: &str = "bootstrap-icons.svg";
+// const BOOSTRAP_BUNDLE_JS_MAP: &str = "bootstrap.bundle.min.js.map";
+// const BOOTSTRAP_ICONS_SVG: &str = "bootstrap-icons.svg";
 
 const BOOTSTRAP_ICONS_CHEVRON_LEFT: &str = "chevron-left.svg";
 const BOOTSTRAP_ICONS_CHEVRON_RIGHT: &str = "chevron-right.svg";
@@ -59,6 +59,11 @@ pub fn App() -> Element {
     use_asset_handler(HISTORY_BAR_CSS, |_, responder| {
         responder.respond(Response::new(
             include_bytes!("../../assets/history-bar.css").to_vec(),
+        ));
+    });
+    use_asset_handler(QUIZ_CSS, |_, responder| {
+        responder.respond(Response::new(
+            include_bytes!("../../assets/quiz.css").to_vec(),
         ));
     });
     use_asset_handler(FAVICON, |_, responder| {
@@ -162,6 +167,7 @@ pub fn App() -> Element {
         document::Link { rel: "stylesheet", href: BOOTSTRAP_ICONS_WOFF2 }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
         document::Link { rel: "stylesheet", href: CARDS_PANEL_CSS }
+        document::Link { rel: "stylesheet", href: QUIZ_CSS }
         document::Script { src: BOOSTRAP_JS }
         // document::Script { src: BOOSTRAP_ESM_JS }
         document::Script { src: BOOSTRAP_BUNDLE_JS }
@@ -173,12 +179,6 @@ pub fn App() -> Element {
             link { rel: "stylesheet", href: HISTORY_BAR_CSS }
         }
         document::Meta { charset: "utf-8" }
-        div { id: "body",
-            div { class: "width-100 flex-column justify-content-start",
-                WorkingPanel {}
-                CardsPanel {}
-            }
-            HistoryBar {}
-        }
+        div { id: "body", ModeNode {} }
     }
 }

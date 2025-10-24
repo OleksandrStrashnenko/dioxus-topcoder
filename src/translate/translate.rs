@@ -4,8 +4,8 @@ use rusqlite::params;
 use serde_json::{json, Value};
 
 const RPC_ID: &str = "MkEWBc";
-pub(crate) struct Translation {
-    pub(crate) translated: Value,
+pub struct Translation {
+    pub translated: Value,
 }
 
 pub async fn translate_from_db_or_google(src: &String) -> Option<String> {
@@ -112,7 +112,6 @@ pub async fn translate(src: &String) -> Option<Translation> {
     };
     let translated_parts: Value = serde_json::from_value(parsed[1][0][0][5].clone()).unwrap();
     let translated = translated_parts[0][0].clone();
-    // let pronunciation: Result<Value, _> = serde_json::from_value(parsed[1][0][0][1].clone());
     println!("translated: {translated}");
     Some(Translation { translated })
 }
