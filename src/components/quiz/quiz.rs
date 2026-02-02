@@ -2,8 +2,8 @@ use crate::quiz_service::quiz_service::QuizServiceImpl;
 use dioxus::core_macro::{component, rsx, Props};
 use dioxus::dioxus_core::Element;
 use dioxus::prelude::*;
-use dioxus_time::use_interval;
 use std::time::Duration;
+use dioxus_sdk_time::use_interval;
 
 #[derive(Props, PartialEq, Clone)]
 pub struct Activated {

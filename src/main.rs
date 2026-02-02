@@ -46,3 +46,18 @@ thread_local! {
         conn
     }
 }
+
+thread_local! {
+    pub static QUIZ_DB: rusqlite::Connection = {
+        let conn = rusqlite::Connection::open("quiz.db").expect("Failed to open database");
+        conn.execute_batch(
+            "CREATE TABLE IF NOT EXISTS quiz (
+                question TEXT UNIQUE NOT NULL,
+                answer TEXT NOT NULL
+            );
+            "
+        ).unwrap();
+
+        conn
+    }
+}
