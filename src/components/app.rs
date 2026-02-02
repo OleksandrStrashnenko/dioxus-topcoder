@@ -1,10 +1,12 @@
 use crate::components::history::HistoryItem;
 use crate::components::mode_node_screen::mode_node::ModeNode;
 use axum::response::Response;
+use dioxus::core::use_after_render;
 use dioxus::core_macro::{component, rsx};
 use dioxus::desktop::use_asset_handler;
 use dioxus::dioxus_core::Element;
 use dioxus::document;
+use dioxus::document::eval;
 use dioxus::hooks::use_context_provider;
 use dioxus::prelude::*;
 
@@ -16,7 +18,8 @@ const QUIZ_CSS: &str = "quiz.css";
 const FAVICON: &str = "favicon.png";
 const FAVICON_ICO: &str = "favicon.ico";
 const BOOTSTRAP_CSS: &str = "bootstrap.css";
-// const BOOTSTRAP_CSS_MAP: &str = "bootstrap.css.map";
+const BOOTSTRAP_CSS_MAP: &str = "bootstrap.css.map";
+const BOOTSTRAP_JS_MAP: &str = "bootstrap.js.map";
 // const BOOTSTRAP_RTL_CSS: &str = "bootstrap.rtl.css";
 // const BOOTSTRAP_GRID_CSS: &str = "bootstrap-grid.css";
 // const BOOTSTRAP_GRID_RTL_CSS: &str = "bootstrap-grid.rtl.css";
@@ -27,15 +30,15 @@ const BOOTSTRAP_CSS: &str = "bootstrap.css";
 const HEADER_SVG: &str = "header.svg";
 const BOOSTRAP_JS: &str = "bootstrap.js";
 // const BOOSTRAP_ESM_JS: &str = "bootstrap.esm.js";
-const BOOSTRAP_BUNDLE_JS: &str = "bootstrap.bundle.js";
+// const BOOSTRAP_BUNDLE_JS: &str = "bootstrap.bundle.js";
 // const BOOSTRAP_BUNDLE_JS_MAP: &str = "bootstrap.bundle.min.js.map";
 // const BOOTSTRAP_ICONS_SVG: &str = "bootstrap-icons.svg";
 
-const BOOTSTRAP_ICONS_CHEVRON_LEFT: &str = "chevron-left.svg";
-const BOOTSTRAP_ICONS_CHEVRON_RIGHT: &str = "chevron-right.svg";
-const BOOTSTRAP_ICONS_CSS: &str = "bootstrap-icons.css";
-const BOOTSTRAP_ICONS_WOFF: &str = "bootstrap-icons.woff";
-const BOOTSTRAP_ICONS_WOFF2: &str = "bootstrap-icons.woff2";
+// const BOOTSTRAP_ICONS_CHEVRON_LEFT: &str = "chevron-left.svg";
+// const BOOTSTRAP_ICONS_CHEVRON_RIGHT: &str = "chevron-right.svg";
+// const BOOTSTRAP_ICONS_CSS: &str = "bootstrap-icons.css";
+// const BOOTSTRAP_ICONS_WOFF: &str = "bootstrap-icons.woff";
+// const BOOTSTRAP_ICONS_WOFF2: &str = "bootstrap-icons.woff2";
 const WORKAROUND_JS: &str = "workaround.js";
 
 #[allow(non_snake_case)]
@@ -81,9 +84,14 @@ pub fn App() -> Element {
             include_bytes!("../../assets/bootstrap-5.3.5/dist/css/bootstrap.css").to_vec(),
         ));
     });
-    // use_asset_handler(BOOTSTRAP_CSS_MAP, |_, responder| {
-    //     // responder.respond(Response::new(include_bytes!("../../assets/bootstrap-5.3.5/dist/css/bootstrap.css.map").to_vec()));
-    // });
+    use_asset_handler(BOOTSTRAP_CSS_MAP, |_, responder| {
+        responder.respond(
+            Response::new(include_bytes!("../../assets/bootstrap-5.3.5/dist/css/bootstrap.css.map").to_vec()));
+    });
+    use_asset_handler(BOOTSTRAP_JS_MAP, |_, responder| {
+        responder.respond(
+            Response::new(include_bytes!("../../assets/bootstrap-5.3.5/dist/js/bootstrap.js.map").to_vec()));
+    });
     // // use_asset_handler(BOOTSTRAP_RTL_CSS, |_, responder| {
     //     responder.respond(Response::new(include_bytes!("../../assets/bootstrap-5.3.5/dist/css/bootstrap.rtl.css").to_vec()));
     // });
@@ -147,7 +155,13 @@ pub fn App() -> Element {
             include_bytes!("../../assets/workaround.js").to_vec(),
         ));
     });
-    use_context_provider(|| Signal::<Vec<HistoryItem>>::new(vec![]));
+    let history_list = use_context_provider(|| Signal::<Vec<HistoryItem>>::new(vec![]));
+    use_effect(move || {
+        history_list.read();
+        eval(r"
+            setDataToDraggables()
+        ");
+    });
     rsx! {
         head {
             link { rel: "icon", href: FAVICON }
@@ -160,17 +174,17 @@ pub fn App() -> Element {
         // document::Link { rel: "stylesheet", href: BOOTSTRAP_REBOOT_RTL_CSS }
         // document::Link { rel: "stylesheet", href: BOOTSTRAP_UTILITIES_CSS }
         // document::Link { rel: "stylesheet", href: BOOTSTRAP_UTILITIES_RTL_CSS }
-        document::Link { rel: "stylesheet", href: BOOTSTRAP_ICONS_CHEVRON_LEFT }
-        document::Link { rel: "stylesheet", href: BOOTSTRAP_ICONS_CHEVRON_RIGHT }
-        document::Link { rel: "stylesheet", href: BOOTSTRAP_ICONS_CSS }
-        document::Link { rel: "stylesheet", href: BOOTSTRAP_ICONS_WOFF }
-        document::Link { rel: "stylesheet", href: BOOTSTRAP_ICONS_WOFF2 }
+        // document::Link { rel: "stylesheet", href: BOOTSTRAP_ICONS_CHEVRON_LEFT }
+        // document::Link { rel: "stylesheet", href: BOOTSTRAP_ICONS_CHEVRON_RIGHT }
+        // document::Link { rel: "stylesheet", href: BOOTSTRAP_ICONS_CSS }
+        // document::Link { rel: "stylesheet", href: BOOTSTRAP_ICONS_WOFF }
+        // document::Link { rel: "stylesheet", href: BOOTSTRAP_ICONS_WOFF2 }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
         document::Link { rel: "stylesheet", href: CARDS_PANEL_CSS }
         document::Link { rel: "stylesheet", href: QUIZ_CSS }
         document::Script { src: BOOSTRAP_JS }
         // document::Script { src: BOOSTRAP_ESM_JS }
-        document::Script { src: BOOSTRAP_BUNDLE_JS }
+        // document::Script { src: BOOSTRAP_BUNDLE_JS }
         document::Script { src: WORKAROUND_JS }
         head {
             link { rel: "stylesheet", href: WORKING_PANEL_CSS }

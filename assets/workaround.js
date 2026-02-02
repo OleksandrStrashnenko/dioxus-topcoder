@@ -1,7 +1,9 @@
 // workaround of bug not firing drag events
-
-for (var draggable of document.querySelectorAll('[draggable="true"]')) {
-    draggable.addEventListener("dragstart", (e) => {
-        e.dataTransfer.setData("text/plain", e.target.id);
-    });
+function setDataToDraggables()  {
+    let draggables = document.querySelectorAll('[draggable="true"]');
+    for (const draggable of draggables) {
+        draggable.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("text/plain", e.target.id);
+        });
+    }
 }

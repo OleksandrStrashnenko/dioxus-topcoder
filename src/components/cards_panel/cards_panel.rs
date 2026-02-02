@@ -25,7 +25,7 @@ pub fn CardsPanel() -> Element {
         div {
             id: "{container_id}",
             style: "list-style-type: none; padding: 10px;",
-            ondrop,
+            ondrop: ondrop,
             for (cardId , (c1 , c2)) in cards.read().iter().enumerate() {
                 Card { id: cardId, content: "{c1} {c2}" }
             }

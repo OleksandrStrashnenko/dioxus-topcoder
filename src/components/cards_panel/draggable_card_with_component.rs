@@ -15,12 +15,15 @@ pub fn CardWithElement(props: IdAndContent) -> Element {
     rsx! {
         div { class: "flex-row",
             div {
+                id: "{props.index}",
                 draggable: true,
                 width: "100px",
-                ondrag: move |_e| {
+                ondrag: move |e| {
+                    // e.prevent_default();
                     current_draggable.set(Some(props.index));
                 },
-                ondragstart: move |e| { println!("dragstart: {:?}", e) },
+                ondragstart: move |e| {
+                    current_draggable.set(Some(props.index)); },
                 ondragend: move |e| {
                     e.prevent_default();
                     println!("dragend: {:?}", e)

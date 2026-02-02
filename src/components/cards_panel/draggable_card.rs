@@ -17,6 +17,9 @@ pub fn Card(props: IdAndContent) -> Element {
             width: "100px",
             ondrag: move |_e| {},
             ondragstart: move |_e| {},
+            ondragover: move |_e| {
+                println!("ondragover {_e:?}");
+            },
             ondragend: move |e| {
                 e.prevent_default();
             },
