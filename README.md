@@ -21,3 +21,11 @@ dx serve --platform desktop
                 a { href: "https://github.com/DioxusLabs/sdk", "⚙️ Dioxus Development Kit" }
                 a { href: "https://marketplace.visualstudio.com/items?itemName=DioxusLabs.dioxus", "💫 VSCode Extension" }
                 a { href: "https://discord.gg/XgGxMSkvUM", "👋 Community Discord" } -->
+
+Future plans
+1. Add possibility to edit/create custom cards
+2. Add "remove all" button
+3. Add Deepl api
+4. Split question/answer
+5. Enumerate cards or at least show the size
+6. Do no scroll "History" upper text
